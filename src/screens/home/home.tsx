@@ -25,7 +25,6 @@ const Home = (props: any) => {
         isMounted.current = false;
       },
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unsubscribe = Navigation.events().registerComponentListener(
       listener,
       props.componentId,
