@@ -14,28 +14,34 @@ interface props {
 }
 
 const PostsList = (props: props) => {
-  const _renderItem = React.useCallback((item, index) => {
-    return (
-      <Pressable
-        onPress={() => {
-          Navigation.push(props.componentId, {
-            component: {
-              name: 'net.loveheaven.webview',
-              passProps: item,
-              options: {
-                topBar: {
-                  visible: false,
+  const _renderItem = React.useCallback(
+    (item, index) => {
+      return (
+        <Pressable
+          onPress={() => {
+            Navigation.push(props.componentId, {
+              component: {
+                name: 'net.loveheaven.webview',
+                passProps: item,
+                options: {
+                  topBar: {
+                    visible: false,
+                  },
+                  bottomTabs: {
+                    visible: false,
+                  },
                 },
               },
-            },
-          });
-        }}
-        style={styles.content}
-        key={index}>
-        <Text style={styles.title}>{item.title}</Text>
-      </Pressable>
-    );
-  }, []);
+            });
+          }}
+          style={styles.content}
+          key={index}>
+          <Text style={styles.title}>{item.title}</Text>
+        </Pressable>
+      );
+    },
+    [props.componentId],
+  );
 
   return props.state ? (
     props.state.map(_renderItem)

@@ -56,6 +56,9 @@ const Posts = (props: any) => {
                       text: props.title,
                     },
                   },
+                  bottomTabs: {
+                    visible: false,
+                  },
                 },
               },
             });

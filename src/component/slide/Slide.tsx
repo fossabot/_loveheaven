@@ -55,6 +55,9 @@ const Slide = (props: props) => {
                       text: item.title,
                     },
                   },
+                  bottomTabs: {
+                    visible: false,
+                  },
                 },
               },
             });

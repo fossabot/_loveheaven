@@ -39,6 +39,9 @@ const List = (props: props) => {
                       text: item.title,
                     },
                   },
+                  bottomTabs: {
+                    visible: false,
+                  },
                 },
               },
             });
