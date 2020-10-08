@@ -1,20 +1,68 @@
 import React from 'react';
-import {ActivityIndicator, Animated, View} from 'react-native';
+import {ActivityIndicator, Animated, Text, View} from 'react-native';
 import {
   getByListWithImage,
   ListLimit,
   getByListWithImageResult,
+  getPostsByGenre,
 } from 'lhscan-extensions';
 import ListItem from 'component/listItem';
+import {Navigation} from 'react-native-navigation';
+import ActionSheet from 'react-native-actions-sheet';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import GenreList from 'component/genreList';
 
 const ListScreen = (props: any) => {
+  const isMounted = React.useRef<boolean | null>(null);
   const [state, setState] = React.useState<getByListWithImageResult[]>([]);
   const [count, setCount] = React.useState<number>(1);
   const loading = React.useRef<Animated.Value>(new Animated.Value(1)).current;
+  const actionSheetRef = React.useRef<any>();
+  const refBtn = React.useRef<any>();
+  const [genre, setGenre] = React.useState<string | undefined>(undefined);
 
   const onCallBack = React.useCallback(() => {
-    getByListWithImage({}).then(setState);
-  }, []);
+    const listener = {
+      componentDidAppear: async () => {
+        isMounted.current = true;
+        getByListWithImage({}).then(setState);
+        Navigation.mergeOptions(props.componentId, {
+          topBar: {
+            rightButtons: [
+              {
+                id: 'setting',
+                color: 'white',
+                icon: await AntIcon.getImageSource('infocirlce', 25),
+              },
+            ],
+          },
+        });
+
+        refBtn.current = Navigation.events().registerNavigationButtonPressedListener(
+          ({buttonId}) => {
+            if (buttonId === 'setting') {
+              actionSheetRef.current?.setModalVisible(true);
+            }
+          },
+        );
+      },
+      componentDidDisappear: () => {
+        isMounted.current = false;
+        if (refBtn.current != null) {
+          refBtn.current.remove();
+          actionSheetRef.current?.setModalVisible(false);
+        }
+      },
+    };
+    const subscriber = Navigation.events().registerComponentListener(
+      listener,
+      props.componentId,
+    );
+
+    return () => {
+      subscriber.remove();
+    };
+  }, [props.componentId]);
 
   React.useEffect(onCallBack, []);
 
@@ -46,6 +94,17 @@ const ListScreen = (props: any) => {
       }
     });
   }, [count, loading]);
+
+  const onSelectGenre = React.useCallback((item) => {
+    if (item) {
+      setGenre(item.title.toLowerCase());
+      getPostsByGenre({genre: item.title.toLowerCase()})
+        .then(setState)
+        .finally(() => {
+          actionSheetRef.current?.setModalVisible(false);
+        });
+    }
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -79,6 +138,14 @@ const ListScreen = (props: any) => {
           <ActivityIndicator color={'red'} size={20} />
         </View>
       </Animated.View>
+      <ActionSheet
+        gestureEnabled
+        containerStyle={{flex: 1}}
+        ref={actionSheetRef}>
+        <View style={{padding: 20}}>
+          <GenreList select={onSelectGenre} />
+        </View>
+      </ActionSheet>
     </View>
   );
 };

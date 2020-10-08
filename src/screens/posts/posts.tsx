@@ -4,6 +4,7 @@ import {Navigation} from 'react-native-navigation';
 import {getPosts} from 'lhscan-extensions';
 import PostsList from 'component/postsList';
 import AntIcon from 'react-native-vector-icons/AntDesign';
+import LoadingIndicator from 'component/loading';
 
 const Posts = (props: any) => {
   const refEvent = React.useRef<any>();
@@ -84,9 +85,13 @@ const Posts = (props: any) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <PostsList componentId={props.componentId} state={state} />
-      </ScrollView>
+      {state.length > 0 ? (
+        <ScrollView>
+          <PostsList componentId={props.componentId} state={state} />
+        </ScrollView>
+      ) : (
+        <LoadingIndicator />
+      )}
     </View>
   );
 };

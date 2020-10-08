@@ -36,7 +36,13 @@ const PostsList = (props: props) => {
           }}
           style={styles.content}
           key={index}>
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>
+            Chapter{' '}
+            {item.title
+              .match(/\d+\.?\d*/gi)
+              .toString()
+              .replace(',', '-')}
+          </Text>
         </Pressable>
       );
     },
@@ -58,6 +64,10 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
+    textTransform: 'uppercase',
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 1.2,
   },
 });
 
