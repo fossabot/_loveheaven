@@ -15,7 +15,7 @@ import numeral from 'numeral';
 import {Navigation} from 'react-native-navigation';
 
 interface props {
-  state: getByListWithImageResult[];
+  state: getByListWithImageResult[] | any;
   onEndReached?: () => void;
   componentId: string;
 }

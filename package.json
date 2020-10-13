@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "lhscan-extensions": "^0.1.13",
+    "lhscan-extensions": "^0.1.15",
     "numeral": "^2.0.6",
     "react": "16.13.1",
     "react-native": "0.63.3",
