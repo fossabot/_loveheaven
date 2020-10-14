@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FlatList,
+  Animated,
   Pressable,
   StyleSheet,
   Text,
@@ -77,23 +77,21 @@ const ListItem = (props: props) => {
   };
 
   return (
-    <View>
-      <FlatList
-        contentContainerStyle={styles.container}
-        data={onValue}
-        initialNumToRender={10}
-        renderItem={_renderItem}
-        keyExtractor={(item) => String(item.id)}
-        numColumns={3}
-        onEndReachedThreshold={0.1}
-        onEndReached={props.onEndReached}
-        getItemLayout={(data, index) => ({
-          length: SIZE_WIDTH * 1.6,
-          offset: SIZE_WIDTH * 1.6 * (props.state.length / 3),
-          index,
-        })}
-      />
-    </View>
+    <Animated.FlatList
+      contentContainerStyle={styles.container}
+      data={onValue}
+      initialNumToRender={10}
+      renderItem={_renderItem}
+      keyExtractor={(item) => String(item.id)}
+      numColumns={3}
+      onEndReachedThreshold={0.1}
+      onEndReached={props.onEndReached}
+      getItemLayout={(data, index) => ({
+        length: SIZE_WIDTH * 1.6,
+        offset: SIZE_WIDTH * 1.6 * (props.state.length / 3),
+        index,
+      })}
+    />
   );
 };
 
